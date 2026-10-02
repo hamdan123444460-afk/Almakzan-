@@ -3,38 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المخزن الذكي - سحابي</title>
-    
+    <title>المخزن الذكي</title>
     <meta name="theme-color" content="#2563eb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="المخزن الذكي">
-    
-    <!-- إعدادات التثبيت التلقائي PWA -->
-    <script>
-    const manifestData = {
-        "name": "المخزن الذكي",
-        "short_name": "المخزن الذكي",
-        "start_url": "/Almakzan-/",
-        "scope": "/Almakzan-/",
-        "display": "standalone",
-        "background_color": "#ffffff",
-        "theme_color": "#2563eb",
-        "icons": [{
-            "src": "[https://i.ibb.co/6803248/icon.png](https://i.ibb.co/6803248/icon.png)",
-            "sizes": "512x512",
-            "type": "image/png"
-        }]
-    };
-    const blob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
-    const manifestURL = URL.createObjectURL(blob);
-    const link = document.createElement('link');
-    link.rel = 'manifest';
-    link.href = manifestURL;
-    document.head.appendChild(link);
-    </script>
+    <style>
+        body { font-family: Tahoma, sans-serif; text-align: center; padding: 50px; background: #f3f4f6; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: inline-block; max-width: 400px; width: 100%; }
+        h2 { color: #1f2937; margin-top: 0; }
+        p { color: #4b5563; font-size: 14px; margin-bottom: 20px; }
+        #install-btn { background: #2563eb; color: white; border: none; padding: 12px 25px; font-size: 16px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; box-shadow: 0 2px 5px rgba(37,99,235,0.3); }
+        #install-btn:active { background: #1d4ed8; }
+    </style>
 </head>
 <body>
-    <!-- محتوى التطبيق -->
+    <div class="card">
+        <h2>المخزن الذكي</h2>
+        <p>جاهز للتثبيت والاستخدام المباشر على جهازك كـ تطبيق مستقل:</p>
+        <button id="install-btn" style="display:none;">تثبيت التطبيق الآن</button>
+    </div>
+
+    <script>
+        const manifestData = {
+            "name": "المخزن الذكي",
+            "short_name": "المخزن الذكي",
+            "start_url": "/Almakzan-/",
+            "scope": "/Almakzan-/",
+            "display": "standalone",
+            "background_color": "#ffffff",
+            "theme_color": "#2563eb",
+            "icons": [{
+                "src": "https://i.ibb.co/6803248/icon.png",
+                "sizes": "512x512",
+                "type": "image/png"
+            }]
+        };
+        const blob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = URL.createObjectURL(blob);
+        document.head.appendChild(link);
+
+        let deferredPrompt;
+        const installBtn = document.getElementById('install-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'block';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBtn.style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+    </script>
 </body>
 </html>
