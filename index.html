@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <style>
-        body { font-family: Tahoma, sans-serif; text-align: center; padding: 50px; background: #f3f4f6; margin: 0; }
+        body { font-family: Tahoma, sans-serif; text-align: center; padding: 50px 20px; background: #f3f4f6; margin: 0; }
         .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: inline-block; max-width: 400px; width: 100%; }
         h2 { color: #1f2937; margin-top: 0; }
         p { color: #4b5563; font-size: 14px; margin-bottom: 20px; }
@@ -19,16 +19,16 @@
 <body>
     <div class="card">
         <h2>المخزن الذكي</h2>
-        <p>جاهز للتثبيت والاستخدام المباشر على جهازك كـ تطبيق مستقل:</p>
-        <button id="install-btn" style="display:none;">تثبيت التطبيق الآن</button>
+        <p>جاهز للتثبيت والاستخدام المباشر على جهازك:</p>
+        <button id="install-btn">تثبيت التطبيق الآن</button>
     </div>
 
     <script>
         const manifestData = {
             "name": "المخزن الذكي",
             "short_name": "المخزن الذكي",
-            "start_url": "/Almakzan-/",
-            "scope": "/Almakzan-/",
+            "start_url": "./",
+            "scope": "./",
             "display": "standalone",
             "background_color": "#ffffff",
             "theme_color": "#2563eb",
@@ -50,17 +50,15 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installBtn.style.display = 'block';
         });
 
         installBtn.addEventListener('click', async () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    installBtn.style.display = 'none';
-                }
                 deferredPrompt = null;
+            } else {
+                alert("لتثبيت التطبيق، افتح قائمة المتصفح واختار 'الإضافة إلى الشاشة الرئيسية' أو 'تثبيت التطبيق'.");
             }
         });
     </script>
